@@ -1,0 +1,26 @@
+Package: MedicareQA
+Type: Package
+Title: QA Medicare data
+Version: 0.1.0
+Authors@R: 
+    c(person(given = "Tanvi", 
+          family = "Gupta", 
+          role = c("cre"),
+          email = "guptata@umich.edu"))
+Description: QA data.
+License: GPL (>= 2)
+Depends:
+  R (>= 3.5.0)
+Imports:
+  dplyr,
+  magrittr,
+  tibble,
+  scales,
+  data.table,
+  rlang,
+  R.utils
+Suggests:
+  testthat
+Encoding: UTF-8
+LazyData: true
+RoxygenNote: 7.1.2
