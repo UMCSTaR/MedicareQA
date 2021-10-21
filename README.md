@@ -5,8 +5,11 @@ An R package for data QA (primarily medicare).
 
 ### Using devtools
 
-1. Generate a github PAT :  [LINK](https://docs.github.com/en/github/authenticating-to-github/keeping-your-account-and-data-secure/creating-a-personal-access-token)
-2. `devtools::install_github("UMCSTaR/MedicareQA", auth_token = <<github PAT>>)`
+You can install MedicareQA from GitHub with devtools:
+
+```
+devtools::install_github("https://github.com/UMCSTaR/MedicareQA")
+```
 
 ### Using RStudio
 
