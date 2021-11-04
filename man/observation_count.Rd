@@ -4,10 +4,15 @@
 \alias{observation_count}
 \title{Count the number of observations in a set of files inside a target directory}
 \usage{
-observation_count(data_root, output_path = NA, file.pattern = ".csv")
+observation_count(
+  data_root_or_file,
+  output_path = NA,
+  file.pattern = ".csv",
+  save_report = FALSE
+)
 }
 \arguments{
-\item{data_root}{Directory path to scan for files}
+\item{data_root_or_file}{Directory path to scan for files OR direct file path if single file}
 
 \item{output_path}{Path for saving report. Path must include .csv name of report. Default is same directory + new folder called reports/obs_report.csv}
 

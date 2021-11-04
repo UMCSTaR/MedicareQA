@@ -1,6 +1,6 @@
 #' Count the number of observations in a set of files inside a target directory
 #'
-#' @param data_root Directory path to scan for files OR direct file path if single file
+#' @param data_root_or_file Directory path to scan for files OR direct file path if single file
 #' @param file.pattern Pattern to use for searching files (default: .csv)
 #' @param output_path Path for saving report. Path must include .csv name of report. Default is same directory + new folder called reports/obs_report.csv
 #' @return data.frame with two columns where each row contains the file and number of observations in the file
@@ -52,15 +52,18 @@ observation_count <- function(data_root_or_file,
 
   colnames(out_df) <- c("file", "number_of_observations")
 
-  if (is.na(output_path)) {
-    output_path = paste0(data_root, "/reports/obs_report.csv")
+  r_name = "obs"
+  if (save_report == TRUE) {
+    if (is.na(output_path)) {
+      output_path = paste0(data_root, "/reports/",r_name,"_report.csv")
+    }
+    out_dir <- dirname(output_path)
+    dir.create(out_dir, showWarnings = FALSE, recursive = TRUE)
+
+    write.csv(out_df, output_path, quote = F, row.names = F)
   }
 
-  out_dir <- dirname(output_path)
-  dir.create(out_dir, showWarnings = FALSE, recursive = TRUE)
-
-  write.csv(out_df, output_path, quote = F, row.names = F)
-
   return(out_df)
+
 }
 

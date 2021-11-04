@@ -4,10 +4,17 @@
 \alias{surgeon_count}
 \title{Count the number of surgeons each year}
 \usage{
-surgeon_count(data_root, output_path = NA, file.pattern = ".csv")
+surgeon_count(
+  data_root_or_file,
+  output_path = NA,
+  file.pattern = ".csv",
+  group_var = "facility_clm_yr",
+  summary_var = "id_physician_npi",
+  save_report = TRUE
+)
 }
 \arguments{
-\item{data_root}{Directory path to scan for files}
+\item{data_root_or_file}{Directory path to scan for files OR direct file path if single file}
 
 \item{output_path}{Path for saving report. Path must include .csv name of report. Default is same directory + new folder called reports/surgeon_count_report.csv}
 

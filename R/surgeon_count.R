@@ -1,6 +1,6 @@
 #' Count the number of surgeons each year
 #'
-#' @param data_root Directory path to scan for files
+#' @param data_root_or_file Directory path to scan for files OR direct file path if single file
 #' @param file.pattern Pattern to use for searching files (default: .csv)
 #' @param output_path Path for saving report. Path must include .csv name of report. Default is same directory + new folder called reports/surgeon_count_report.csv
 #' @return data.frame with two columns where each row contains the file and number of observations in the file
@@ -8,41 +8,52 @@
 #' @importFrom utils write.csv
 #' @importFrom data.table fread
 #' @export
-surgeon_count <- function(data_root,
+surgeon_count <- function(data_root_or_file,
                           output_path = NA,
                           file.pattern = ".csv",
                           group_var = "facility_clm_yr",
                           summary_var = "id_physician_npi",
                           save_report = TRUE) {
-  # check if directory exists or not
-  if (!dir.exists(data_root)) {
-    stop(paste0(
-      "directory doesn't exist: ",
-      data_root
-    ))
+
+  # check if directory or file
+  if (R.utils::isDirectory(data_root_or_file)) {
+    data_root <- data_root_or_file
+
+    # check if directory exists or not
+    if (!dir.exists(data_root)) {
+      stop(paste0(
+        "directory doesn't exist: ",
+        data_root
+      ))
+    }
+
+    # get the list of csv files inside the directory
+    files_found = list.files(data_root, pattern = file.pattern, full.names = T)
+
+    # report error if no matching files are found
+    if (length(files_found) < 1) {
+      stop(paste0(
+        "no files matching pattern found inside: ",
+        data_root
+      ))
+    }
+  } else if (R.utils::isFile(data_root_or_file)) {
+    data_root <- dirname(data_root_or_file)
+    files_found <- data_root_or_file
+  } else {
+    stop("Something went wrong.")
   }
 
-  # get the list of csv files inside the directory
-  files_inside_dir = list.files(data_root, pattern = file.pattern, full.names = T)
+  message(paste0("Found ", length(files_found), " file(s)."))
 
-  # report error if no matching files are found
-  if (length(files_inside_dir) < 1) {
-    stop(paste0(
-      "no files matching pattern found inside: ",
-      data_root
-    ))
-  }
-
-  message(paste0("Found ", length(files_inside_dir), " files."))
-
-  out_df <- do.call(rbind, lapply(files_inside_dir, function(file_path) {
+  out_df <- do.call(rbind, lapply(files_found, function(file_path) {
     data.table::fread(file_path) %>%
       dplyr::group_by(!!(group_var) := get(group_var)) %>%
       dplyr::summarise(surgeon_count = length(unique(get(summary_var)))) %>%
       as.data.frame()
   }))
 
-  r_name = "surgeon"
+  r_name = "surgeon_count"
 
   if(save_report == TRUE){
     if (is.na(output_path)) {
