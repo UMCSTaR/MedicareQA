@@ -52,6 +52,10 @@ procedure_count <- function(data_root_or_file,
       as.data.frame()
   }))
 
+  # Replacing commas in e_proc_grp_lbl with '|' due to issues with csv output
+  out_df$e_proc_grp_lbl = str_replace_all(out_df$e_proc_grp_lbl, ',', '|')
+
+
   r_name = "procedure_count"
   if (save_report == TRUE) {
     if (is.na(output_path)) {
